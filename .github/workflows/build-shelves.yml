@@ -14,42 +14,39 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Install mdBook
         run: cargo install mdbook --version 0.4.36
-
-      - name: Build cargo docs
-        run: cargo doc --no-deps --release
+      
+      - name: Install mdbook-mermaid
+        run: cargo install mdbook-mermaid
 
       - name: Build Shelf 1
         run: |
           cd bookshelf
-          cd ".\Shelf 1 Getting Started\"
+          cd "Shelf 1 Getting Started"
           cd overview
           mdbook build
-          cd ..\uefi 
+          cd ../uefi 
           mdbook build
 
       - name: Build Shelf 2
         run: |
-          cd "..\..\Shelf 2 Examples\"
+          cd "../../Shelf 2 Examples"
           cd qemu
           mdbook build
-          cd "..\Embedded Services\"
+          cd "../Embedded Services"
           mdbook build
-          cd "..\How To Build a Modern Laptop\"
+          cd "../How To Build a Modern Laptop"
           mdbook build
 
       - name: Build Shelf 4
         run: |
-          cd "..\..\Shelf 4 Specifications\"
+          cd "../../Shelf 4 Specifications"
           cd "EC Interface"
           mdbook build
 
@@ -114,7 +111,7 @@ jobs:
           find site
 
       - name: Publish to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./site
